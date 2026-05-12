@@ -81,6 +81,33 @@ La IA busca etiquetas de instrucción en sus propias respuestas como `[NOTIFICAR
 
 ---
 
+## 🧩 Lógica del Orquestador Principal (`index.js`)
+
+El funcionamiento del asistente se rige por un conjunto de premisas y protocolos técnicos que garantizan una atención eficiente y segura:
+
+### 1. El "Cerebro" (System Prompt)
+La base lógica reside en un `SYSTEM_PROMPT` que define las **Reglas de Oro**:
+*   **Prioridad de Resolución:** El bot siempre intenta resolver la incidencia antes de derivar a soporte humano.
+*   **Triaje Obligatorio:** Protocolo estricto de autodiagnóstico (Bluetooth, proximidad, reinicio de App) para fallos técnicos.
+*   **Control por Etiquetas:** Uso de etiquetas ocultas (`[NOTIFICAR_ADMIN]`, `[ENVIAR_EMAIL]`) para disparar acciones en el backend.
+*   **Gestión Horaria de Canarias:** Planes de acción (A, B y C) dinámicos según la hora local y la isla afectada.
+
+### 2. Procesamiento Multimodal y Agregación
+*   **Sistema de Debounce:** Agrupa mensajes, fotos y audios enviados en un intervalo de 2.5s para procesarlos como una única consulta contextual.
+*   **Tratamiento de Evidencias:** Subida automatizada a Firebase Storage para generar reportes con enlaces permanentes.
+*   **Voz y TTS:** Conversión de notas de voz a texto y respuesta mediante síntesis de voz (Google TTS) con ajuste de velocidad (1.2x) para mayor naturalidad.
+
+### 3. Triage y Extracción de Datos
+*   **Identificación Automática:** Extracción mediante Regex de **DNI, Matrícula e Isla** para enriquecer el contexto de la conversación.
+*   **Persistencia de Contexto:** Mantenimiento de una ventana de contexto de los últimos 20 mensajes.
+
+### 4. Acciones y Monitorización
+*   **Reportes Automáticos:** Generación de logs detallados en Firestore (`logs_emails`) ante incidencias reportadas.
+*   **Alertas Críticas:** Reenvío inmediato de evidencias y resúmenes al Telegram del administrador.
+*   **Feedback de Usuario:** Sistema integrado de valoración de respuestas para mejora continua del modelo.
+
+---
+
 ## 📁 Organización del Proyecto
 
 Tras la última optimización, el proyecto sigue esta estructura:

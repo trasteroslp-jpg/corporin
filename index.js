@@ -672,11 +672,20 @@ bot.action(/fb_(pos|neg)_(.+)/, (ctx) => {
 });
 
 
-console.log('🚀 Iniciando bot.launch()...');
-bot.launch({ dropPendingUpdates: true }).then(() => {
-    console.log('🤖 Bot de Corporin AVIS iniciado correctamente');
+bot.telegram.getMe().then(me => {
+    console.log(`✅ Conectado a Telegram como: @${me.username}`);
+    console.log('🚀 Llamando a bot.launch()...');
+    bot.launch()
+        .then(() => {
+            console.log('🤖 Bot de Corporin AVIS iniciado correctamente y escuchando.');
+        })
+        .catch(err => {
+            console.error('❌ Error fatal al iniciar el bot:', err);
+            process.exit(1);
+        });
 }).catch(err => {
-    console.error('❌ Error al iniciar el bot:', err);
+    console.error('❌ Error de conexión inicial:', err.message);
+    process.exit(1);
 });
 
 // Heartbeat log cada 15 minutos para confirmar que sigue vivo en segundo plano
